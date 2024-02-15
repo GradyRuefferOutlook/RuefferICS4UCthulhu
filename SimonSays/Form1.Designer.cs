@@ -28,17 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.OctarineGenerator = new System.Windows.Forms.Timer(this.components);
+            this.ColourGenerator = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
+            // 
+            // OctarineGenerator
+            // 
+            this.OctarineGenerator.Enabled = true;
+            this.OctarineGenerator.Interval = 20;
+            this.OctarineGenerator.Tick += new System.EventHandler(this.OctarineGenerator_Tick);
+            // 
+            // ColourGenerator
+            // 
+            this.ColourGenerator.Enabled = true;
+            this.ColourGenerator.Interval = 20;
+            this.ColourGenerator.Tick += new System.EventHandler(this.ColourGenerator_Tick);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(452, 462);
+            this.ClientSize = new System.Drawing.Size(301, 300);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Simon Says";
@@ -48,6 +62,9 @@
         }
 
         #endregion
+
+        public System.Windows.Forms.Timer ColourGenerator;
+        public System.Windows.Forms.Timer OctarineGenerator;
     }
 }
 

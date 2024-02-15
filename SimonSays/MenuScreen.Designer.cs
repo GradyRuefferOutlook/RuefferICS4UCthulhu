@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MenuScreen));
             this.exitButton = new System.Windows.Forms.Button();
             this.newButton = new System.Windows.Forms.Button();
+            this.MenuOp = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // exitButton
@@ -43,10 +45,9 @@
             this.exitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.exitButton.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.exitButton.ForeColor = System.Drawing.Color.White;
-            this.exitButton.Location = new System.Drawing.Point(21, 63);
-            this.exitButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.exitButton.Location = new System.Drawing.Point(16, 51);
             this.exitButton.Name = "exitButton";
-            this.exitButton.Size = new System.Drawing.Size(112, 39);
+            this.exitButton.Size = new System.Drawing.Size(84, 32);
             this.exitButton.TabIndex = 19;
             this.exitButton.Text = "Exit";
             this.exitButton.UseVisualStyleBackColor = false;
@@ -62,18 +63,23 @@
             this.newButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.newButton.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.newButton.ForeColor = System.Drawing.Color.White;
-            this.newButton.Location = new System.Drawing.Point(21, 16);
-            this.newButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.newButton.Location = new System.Drawing.Point(16, 13);
             this.newButton.Name = "newButton";
-            this.newButton.Size = new System.Drawing.Size(112, 39);
+            this.newButton.Size = new System.Drawing.Size(84, 32);
             this.newButton.TabIndex = 18;
             this.newButton.Text = "New Game";
             this.newButton.UseVisualStyleBackColor = false;
             this.newButton.Click += new System.EventHandler(this.newButton_Click);
             // 
+            // MenuOp
+            // 
+            this.MenuOp.Enabled = true;
+            this.MenuOp.Interval = 20;
+            this.MenuOp.Tick += new System.EventHandler(this.MenuOp_Tick);
+            // 
             // MenuScreen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
@@ -81,9 +87,9 @@
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.newButton);
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "MenuScreen";
-            this.Size = new System.Drawing.Size(401, 369);
+            this.Size = new System.Drawing.Size(301, 300);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.MenuScreen_Paint);
             this.ResumeLayout(false);
 
@@ -93,5 +99,6 @@
 
         private System.Windows.Forms.Button exitButton;
         private System.Windows.Forms.Button newButton;
+        private System.Windows.Forms.Timer MenuOp;
     }
 }
