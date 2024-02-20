@@ -67,6 +67,12 @@
     <Compile Include="GameScreen.Designer.cs">
       <DependentUpon>GameScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoadingScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LoadingScreen.Designer.cs">
+      <DependentUpon>LoadingScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="MenuScreen.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -83,6 +89,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GameScreen.resx">
       <DependentUpon>GameScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoadingScreen.resx">
+      <DependentUpon>LoadingScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MenuScreen.resx">
       <DependentUpon>MenuScreen.cs</DependentUpon>
@@ -125,6 +134,135 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\SimonSaysImage.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftDark %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftDark %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftDark %283%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftDark %284%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftDark %285%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftLight %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftLight %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftLight %283%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftLight %284%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftLight %285%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftBase %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftBase %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftBase %283%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftBase %284%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveCraftBase %285%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG4 %282%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG3 %282%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %283%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %284%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %285%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %286%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %287%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %288%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %289%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %2810%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %2811%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %2812%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %2813%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %2814%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoveRun %2815%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG1.4MBtkAaS0OJV1BIgzO.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG3__3_-removebg-preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG3 %283%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG1__8_-removebg-preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG1 %288%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG4__2_-removebg-preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\man.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG2 %285%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG2 %284%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG1 %289%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIG1.4MBtkAaS0OJV1BIgzO-transformed.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

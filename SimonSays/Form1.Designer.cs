@@ -29,15 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.OctarineGenerator = new System.Windows.Forms.Timer(this.components);
             this.ColourGenerator = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
-            // 
-            // OctarineGenerator
-            // 
-            this.OctarineGenerator.Enabled = true;
-            this.OctarineGenerator.Interval = 20;
-            this.OctarineGenerator.Tick += new System.EventHandler(this.OctarineGenerator_Tick);
             // 
             // ColourGenerator
             // 
@@ -47,16 +40,19 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(301, 300);
+            this.ClientSize = new System.Drawing.Size(401, 369);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Simon Says";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.ResumeLayout(false);
 
         }
@@ -64,7 +60,6 @@
         #endregion
 
         public System.Windows.Forms.Timer ColourGenerator;
-        public System.Windows.Forms.Timer OctarineGenerator;
     }
 }
 

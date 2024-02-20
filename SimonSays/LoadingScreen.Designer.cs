@@ -1,6 +1,6 @@
 ﻿namespace SimonSays
 {
-    partial class MenuScreen
+    partial class LoadingScreen
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,39 +29,29 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.MenuOp = new System.Windows.Forms.Timer(this.components);
-            this.ScreenFader = new System.Windows.Forms.Timer(this.components);
+            this.LoadingOp = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
-            // MenuOp
+            // LoadingOp
             // 
-            this.MenuOp.Enabled = true;
-            this.MenuOp.Interval = 20;
-            this.MenuOp.Tick += new System.EventHandler(this.MenuOp_Tick);
+            this.LoadingOp.Tick += new System.EventHandler(this.LoadingOp_Tick);
             // 
-            // ScreenFader
-            // 
-            this.ScreenFader.Interval = 20;
-            this.ScreenFader.Tick += new System.EventHandler(this.ScreenFader_Tick);
-            // 
-            // MenuScreen
+            // LoadingScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.DimGray;
-            this.BackgroundImage = global::SimonSays.Properties.Resources.Menu;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BackColor = System.Drawing.Color.Black;
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Name = "MenuScreen";
+            this.Name = "LoadingScreen";
             this.Size = new System.Drawing.Size(401, 369);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.MenuScreen_Paint);
+            this.Load += new System.EventHandler(this.LoadingScreen_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.LoadingScreen_Paint);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.Timer MenuOp;
-        private System.Windows.Forms.Timer ScreenFader;
+
+        public System.Windows.Forms.Timer LoadingOp;
     }
 }
