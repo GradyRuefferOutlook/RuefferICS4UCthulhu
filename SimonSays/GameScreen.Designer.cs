@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.ScreenOpener = new System.Windows.Forms.Timer(this.components);
             this.LovecraftOperator = new System.Windows.Forms.Timer(this.components);
+            this.CompTurn = new System.Windows.Forms.Timer(this.components);
+            this.YourTurn = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // ScreenOpener
@@ -42,6 +44,16 @@
             // 
             this.LovecraftOperator.Interval = 20;
             this.LovecraftOperator.Tick += new System.EventHandler(this.LovecraftOperator_Tick);
+            // 
+            // CompTurn
+            // 
+            this.CompTurn.Interval = 20;
+            this.CompTurn.Tick += new System.EventHandler(this.CompTurn_Tick);
+            // 
+            // YourTurn
+            // 
+            this.YourTurn.Interval = 20;
+            this.YourTurn.Tick += new System.EventHandler(this.YourTurn_Tick);
             // 
             // GameScreen
             // 
@@ -64,5 +76,7 @@
 
         private System.Windows.Forms.Timer ScreenOpener;
         private System.Windows.Forms.Timer LovecraftOperator;
+        private System.Windows.Forms.Timer CompTurn;
+        private System.Windows.Forms.Timer YourTurn;
     }
 }

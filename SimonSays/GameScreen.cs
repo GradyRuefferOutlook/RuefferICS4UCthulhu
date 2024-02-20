@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Media;
 using System.Drawing.Drawing2D;
 using System.Threading;
+using System.Security.Policy;
 
 namespace SimonSays
 {
@@ -18,7 +19,17 @@ namespace SimonSays
         Rectangle CthulhuHead;
         PointF[] cthulhuLeftEye;
         PointF[] cthulhuRightEye;
-        //Color[] eyeColour = { Color.Red.ToArgb, Color.Orange.ToArgb, Color.Yellow.ToArgb, Color.Green.ToArgb, Color.Blue.ToArgb, Color.Pink.ToArgb, Color.Purple.ToArgb, Color.FromArgb(255, Form1.octarineRB, Form1.octarineG, Form1.octarineRB) };
+
+        bool hisTurn = true;
+        int eyeTracker = 0;
+
+        int turnTracker = 0;
+        bool inc = true;
+
+        public static bool correctInc = false;
+        int correctAlpha = 0;
+
+        public static int flashRate = 15;
 
         public GameScreen()
         {
@@ -29,6 +40,8 @@ namespace SimonSays
         private void GameScreen_Load(object sender, EventArgs e)
         {
             ScreenOpener.Enabled = true;
+            Form1.cthulhuPattern.Clear();
+            Form1.cthulhuPattern.Add(Form1.rndGen.Next(0, 8));
             //TODO: clear the pattern list from form1
             //TODO: refresh
             //TODO: pause for a bit
@@ -86,8 +99,18 @@ namespace SimonSays
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
             DrawEyes();
-            e.Graphics.FillPolygon(new SolidBrush(Color.Red), cthulhuLeftEye);
-            e.Graphics.FillPolygon(new SolidBrush(Color.Red), cthulhuRightEye);
+            e.Graphics.FillPolygon(new SolidBrush(Color.Black), cthulhuLeftEye);
+            e.Graphics.FillPolygon(new SolidBrush(Color.Black), cthulhuRightEye);
+            if (hisTurn)
+            {
+                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(Form1.eyeColour[eyeTracker].alpha, Form1.eyeColour[eyeTracker].red, Form1.eyeColour[eyeTracker].green, Form1.eyeColour[eyeTracker].blue)), cthulhuLeftEye);
+                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(Form1.eyeColour[eyeTracker].alpha, Form1.eyeColour[eyeTracker].red, Form1.eyeColour[eyeTracker].green, Form1.eyeColour[eyeTracker].blue)), cthulhuRightEye);
+            }
+            else if (!hisTurn)
+            {
+                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, correctAlpha, correctAlpha, correctAlpha)), cthulhuLeftEye);
+                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, correctAlpha, correctAlpha, correctAlpha)), cthulhuRightEye);
+            }
 
             e.Graphics.DrawImage(Properties.Resources.CthulhuHead, CthulhuHead);
 
@@ -160,7 +183,7 @@ namespace SimonSays
 
         private void ScreenOpener_Tick(object sender, EventArgs e)
         {
-            screenFade-=5;
+            screenFade -= 5;
             if (screenFade < 0)
             {
                 LovecraftOperator.Enabled = true;
@@ -174,6 +197,121 @@ namespace SimonSays
         {
             Form1.UserInput();
             Form1.DrawUserInput(Form1.radius, this);
+
+            if (hisTurn)
+            {
+                turnTracker = 0;
+                LovecraftOperator.Enabled = false;
+                CompTurn.Enabled = true;
+                return;
+            }
+            else
+            {
+                correctInc = false;
+                correctAlpha = 0;
+                Form1.pPattern.Clear();
+                LovecraftOperator.Enabled = false;
+                YourTurn.Enabled = true;
+                return;
+            }
+        }
+
+        private void CompTurn_Tick(object sender, EventArgs e)
+        {
+            Form1.UserInput();
+            Form1.DrawUserInput(Form1.radius, this);
+
+            eyeTracker = Form1.cthulhuPattern[turnTracker];
+            if (inc)
+            {
+                Form1.eyeColour[eyeTracker].alpha += flashRate;
+            }
+            else
+            {
+                Form1.eyeColour[eyeTracker].alpha -= flashRate;
+            }
+
+            if (Form1.eyeColour[eyeTracker].alpha > 255 && inc)
+            {
+                inc = !inc;
+                Form1.eyeColour[eyeTracker].alpha = 255;
+            }
+            else if (Form1.eyeColour[eyeTracker].alpha < 0 && !inc)
+            {
+                turnTracker++;
+                Form1.eyeColour[eyeTracker].alpha = 0;
+                inc = !inc;
+            }
+
+            if (turnTracker > Form1.cthulhuPattern.Count - 1)
+            {
+                hisTurn = !hisTurn;
+                LovecraftOperator.Enabled = true;
+                CompTurn.Enabled = false;
+                return;
+            }
+
+            Refresh();
+        }
+
+        private void YourTurn_Tick(object sender, EventArgs e)
+        {
+            Form1.UserInput();
+            Form1.DrawUserInput(Form1.radius, this);
+
+            if (correctInc)
+            {
+                correctAlpha += flashRate;
+            }
+            else
+            {
+                correctAlpha -= flashRate;
+            }
+
+            if (correctAlpha > 255)
+            {
+                correctAlpha = 255;
+                correctInc = false;
+            }
+            else if (correctAlpha < 0)
+            {
+                correctAlpha = 0;
+            }
+
+            if (Form1.prot)
+            {
+
+            }
+
+            if (Form1.press)
+            {
+                Form1.DetermineClosest();
+                if (!Form1.ComparePattern())
+                {
+                    YourTurn.Enabled = false;
+                    GameOver();
+                    return;
+                }
+            }
+
+            if (Form1.pPattern.Count >= Form1.cthulhuPattern.Count)
+            {
+                if (Form1.ComparePattern())
+                {
+                    Form1.cthulhuPattern.Add(Form1.rndGen.Next(0, 8));
+                    hisTurn = true;
+                    LovecraftOperator.Enabled = true;
+                    YourTurn.Enabled = false;
+                    return;
+                }
+                else
+                {
+                    YourTurn.Enabled = false;
+                    GameOver();
+                    return;
+                }
+            }
+
             Refresh();
         }
     }

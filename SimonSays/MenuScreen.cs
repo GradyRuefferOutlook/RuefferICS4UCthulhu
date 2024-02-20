@@ -139,11 +139,6 @@ namespace SimonSays
 
             Form1.DrawUserInput(Form1.radius, this);
 
-            if (Form1.distance < -775)
-            {
-                // Form1.distance = -160;
-            }
-
             if (Form1.press)
             {
                 Form1.DetermineClosest();
@@ -154,6 +149,7 @@ namespace SimonSays
                 Form1.prot = false;
                 ScreenFader.Enabled = true;
                 MenuOp.Enabled = false;
+                LoadingScreen.sentFromMenu = true;
                 return;
             }
 

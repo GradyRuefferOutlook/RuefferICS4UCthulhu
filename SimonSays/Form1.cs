@@ -30,7 +30,6 @@ namespace SimonSays
 
         public static Boolean moveFor, moveBac, prot, press;
 
-        //TODO: create a List to store the pattern. Must be accessable on other screens
         public static List<Int64> protectionPattern = new List<Int64>();
 
         public static bool playType = false, scrollType = false;
@@ -39,9 +38,40 @@ namespace SimonSays
         FontFamily fontFamily = new FontFamily("Perpetua");
         public static Font font = new Font(new FontFamily("Perpetua"), 35, FontStyle.Bold, GraphicsUnit.Pixel);
 
+        public static List<int> cthulhuPattern = new List<int>();
+        public static List<int> pPattern = new List<int>();
+        public static ARGB[] eyeColour = {new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB()};
+
+        public static bool inGame = false;
+        public static bool reverse = true;
+
+        public class ARGB
+        {
+            public int alpha;
+            public int red;
+            public int green;
+            public int blue;
+
+            public void Setup(int a, int r, int g, int b)
+            {
+                alpha = a;
+                red = r;
+                green = g;
+                blue = b;
+            }
+        }
+
         public Form1()
         {
             InitializeComponent();
+            eyeColour[0].Setup(0, 255, 0, 0);
+            eyeColour[1].Setup(0, 255, 165, 0);
+            eyeColour[2].Setup(0, 255, 255, 0);
+            eyeColour[3].Setup(0, 0, 255, 0);
+            eyeColour[4].Setup(0, 0, 0, 255);
+            eyeColour[5].Setup(0, 255, 192, 203);
+            eyeColour[6].Setup(0, 160, 32, 240);
+            eyeColour[7].Setup(0, octarineRB, octarineG, octarineRB);
             radius = (this.Width / 2 + 10);
             distance = -radius;
             this.KeyPreview = true;
@@ -94,11 +124,11 @@ namespace SimonSays
                 octarineRB -= 5;
             }
 
-            if (octarineG > 150)
+            if (octarineG > 255)
             {
                 octarineG = 150;
             }
-            else if (octarineG < 0)
+            else if (octarineG < 175)
             {
                 octarineG = 0;
             }
@@ -1141,35 +1171,107 @@ namespace SimonSays
                 }
             }
 
-            switch (comp)
+            if (inGame)
             {
-                case 0:
-                    //Red
-                    break;
-                case 1:
-                    //Orange
-                    break;
-                case 2:
-                    //Yellow
-                    break;
-                case 3:
-                    //Green
-                    break;
-                case 4:
-                    //Blue
-                    break;
-                case 5:
-                    //Pink
-                    break;
-                case 6:
-                    //Purple
-                    break;
-                case 7:
-                    //Octarine
-                    break;
+                switch (comp)
+                {
+                    case 0:
+                        //Red
+                        pPattern.Add(0);
+                        break;
+                    case 1:
+                        //Orange
+                        pPattern.Add(1);
+                        break;
+                    case 2:
+                        //Yellow
+                        pPattern.Add(2);
+                        break;
+                    case 3:
+                        //Green
+                        pPattern.Add(3);
+                        break;
+                    case 4:
+                        //Blue
+                        pPattern.Add(4);
+                        break;
+                    case 5:
+                        //Pink
+                        pPattern.Add(5);
+                        break;
+                    case 6:
+                        //Purple
+                        pPattern.Add(6);
+                        break;
+                    case 7:
+                        //Octarine
+                        pPattern.Add(7);
+                        eyeColour[7].red = octarineRB;
+                        eyeColour[7].green = octarineG;
+                        eyeColour[7].blue = octarineRB;
+                        break;
+                }
+            }
+            else
+            {
+                switch (comp)
+                {
+                    case 0:
+                        //Red
+                        break;
+                    case 1:
+                        //Orange
+                        break;
+                    case 2:
+                        //Yellow
+                        break;
+                    case 3:
+                        //Green
+                        break;
+                    case 4:
+                        //Blue
+                        break;
+                    case 5:
+                        //Pink
+                        break;
+                    case 6:
+                        //Purple
+                        break;
+                    case 7:
+                        //Octarine
+                        break;
+                }
             }
 
             Form1.press = false;
+        }
+
+        public static bool ComparePattern()
+        {
+            if (!reverse)
+            {
+                for (int i = 0; i < pPattern.Count; i++)
+                {
+                    if (pPattern[i] != cthulhuPattern[i])
+                    {
+                        return false;
+                    }
+                }
+                GameScreen.correctInc = true;
+                return true;
+            }
+            else
+            {
+                for (int i = 0; i < pPattern.Count; i++)
+                {
+                    if (pPattern[i] != cthulhuPattern[cthulhuPattern.Count - 1 - i])
+                    {
+                        return false;
+                    } 
+                }
+                GameScreen.correctInc = true;
+                return true;
+            }
         }
     }
 }

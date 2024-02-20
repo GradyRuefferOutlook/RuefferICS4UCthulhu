@@ -17,6 +17,7 @@ namespace SimonSays
         Image[] lovecraftRun = new Image[15];
         int runOp = 0;
         int runCount = 0;
+        public static bool sentFromMenu = true;
         public LoadingScreen()
         {
             InitializeComponent();
@@ -59,7 +60,16 @@ namespace SimonSays
 
             if (runCount == 2)
             {
-                Form1.ScreenChanger(new GameScreen(), this);
+                if (sentFromMenu)
+                {
+                    Form1.ScreenChanger(new GameScreen(), this);
+                    Form1.inGame = true;
+                }
+                else
+                {
+                    Form1.ScreenChanger(new MenuScreen(), this);
+                    Form1.inGame = false;
+                }
                 runCount = 0;
                 runOp = 0;
                 LoadingOp.Enabled = false;
