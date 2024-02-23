@@ -10,6 +10,7 @@ using System.Threading;
 using System.Media;
 using System.Drawing.Drawing2D;
 using System.Runtime.CompilerServices;
+using System.IO;
 
 namespace SimonSays
 {
@@ -37,13 +38,21 @@ namespace SimonSays
 
         FontFamily fontFamily = new FontFamily("Perpetua");
         public static Font font = new Font(new FontFamily("Perpetua"), 35, FontStyle.Bold, GraphicsUnit.Pixel);
+        public static Font fancyFont = new Font(new FontFamily("Antiquity Print"), 11, FontStyle.Bold, GraphicsUnit.Pixel);
 
         public static List<int> cthulhuPattern = new List<int>();
         public static List<int> pPattern = new List<int>();
         public static ARGB[] eyeColour = {new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB()};
 
         public static bool inGame = false;
-        public static bool reverse = true;
+        public static bool reverse = false;
+        public static bool isOver = false;
+
+        public static System.Windows.Media.MediaPlayer backMusic = new System.Windows.Media.MediaPlayer();
+
+        public static System.Windows.Media.MediaPlayer instructSound = new System.Windows.Media.MediaPlayer();
+
+        public static System.Windows.Media.MediaPlayer continueSound = new System.Windows.Media.MediaPlayer();
 
         public class ARGB
         {
@@ -75,6 +84,17 @@ namespace SimonSays
             radius = (this.Width / 2 + 10);
             distance = -radius;
             this.KeyPreview = true;
+            backMusic.Open(new Uri(Application.StartupPath + "\\Resources\\spellcraft-142264 (mp3cut.net).wav"));
+
+            backMusic.MediaEnded += new EventHandler(backMedia_MediaEnded);
+            backMusic.Play();
+        }
+
+        private void backMedia_MediaEnded(object sender, EventArgs e)
+        {
+            backMusic.Stop();
+
+            backMusic.Play();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -179,6 +199,11 @@ namespace SimonSays
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            if (isOver)
+            {
+                isOver = !isOver;
+                return;
+            }
             switch (e.KeyCode)
             {
                 case Keys.A:
@@ -207,14 +232,20 @@ namespace SimonSays
                 case Keys.W:
                     press = false;
                     break;
+                case Keys.Escape:
+                    MenuScreen.showInstructions = !MenuScreen.showInstructions;
+                    instructSound.Open(new Uri(Application.StartupPath + "\\Resources\\handle-paper-foley-2-172689 (mp3cut.net).wav"));
+                    instructSound.Play();
+                    break;
                 case Keys.Space:
                     press = false;
                     break;
+
             }
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
-        {
+        {           
             switch (e.KeyCode)
             {
                 case Keys.A:
@@ -1206,11 +1237,13 @@ namespace SimonSays
                     case 7:
                         //Octarine
                         pPattern.Add(7);
+
                         eyeColour[7].red = octarineRB;
                         eyeColour[7].green = octarineG;
                         eyeColour[7].blue = octarineRB;
                         break;
                 }
+                GameScreen.playSound(comp);
             }
             else
             {

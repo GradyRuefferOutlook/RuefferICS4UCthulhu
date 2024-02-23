@@ -35,7 +35,6 @@
             // 
             // MenuOp
             // 
-            this.MenuOp.Enabled = true;
             this.MenuOp.Interval = 20;
             this.MenuOp.Tick += new System.EventHandler(this.MenuOp_Tick);
             // 
@@ -55,6 +54,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MenuScreen";
             this.Size = new System.Drawing.Size(401, 369);
+            this.Load += new System.EventHandler(this.MenuScreen_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.MenuScreen_Paint);
             this.ResumeLayout(false);
 

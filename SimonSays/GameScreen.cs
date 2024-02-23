@@ -10,6 +10,7 @@ using System.Media;
 using System.Drawing.Drawing2D;
 using System.Threading;
 using System.Security.Policy;
+using System.IO;
 
 namespace SimonSays
 {
@@ -29,7 +30,18 @@ namespace SimonSays
         public static bool correctInc = false;
         int correctAlpha = 0;
 
+        bool isOpening = true;
+
         public static int flashRate = 15;
+
+        public static System.Windows.Media.MediaPlayer redSound = new System.Windows.Media.MediaPlayer();
+        public static System.Windows.Media.MediaPlayer orangeSound = new System.Windows.Media.MediaPlayer();
+        public static System.Windows.Media.MediaPlayer yellowSound = new System.Windows.Media.MediaPlayer();
+        public static System.Windows.Media.MediaPlayer greenSound = new System.Windows.Media.MediaPlayer();
+        public static System.Windows.Media.MediaPlayer blueSound = new System.Windows.Media.MediaPlayer();
+        public static System.Windows.Media.MediaPlayer pinkSound = new System.Windows.Media.MediaPlayer();
+        public static System.Windows.Media.MediaPlayer purpleSound = new System.Windows.Media.MediaPlayer();
+        public static System.Windows.Media.MediaPlayer octarineSound = new System.Windows.Media.MediaPlayer();
 
         public GameScreen()
         {
@@ -75,10 +87,8 @@ namespace SimonSays
 
         public void GameOver()
         {
-            //TODO: Play a game over sound
-
-            //TODO: close this screen and open the GameOverScreen
-
+            ScreenOpener.Enabled = true;
+            return;
         }
 
         void DrawEyes()
@@ -179,19 +189,53 @@ namespace SimonSays
             {
                 e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(screenFade, 0, 0, 0)), new Rectangle(0, 0, this.Width, this.Height));
             }
+
+            if (MenuScreen.showInstructions)
+            {
+                e.Graphics.FillRectangle(new SolidBrush(Color.Beige), MenuScreen.InstructionScreen);
+                e.Graphics.DrawString("INSTRUCTIONS", Form1.fancyFont, new SolidBrush(Color.Black), MenuScreen.InstructionScreen.X, MenuScreen.InstructionScreen.Y + 2);
+                e.Graphics.DrawString("Space or W:", Form1.fancyFont, new SolidBrush(Color.Black), MenuScreen.InstructionScreen.X, MenuScreen.InstructionScreen.Y + 25);
+                e.Graphics.DrawString("      To Select", Form1.fancyFont, new SolidBrush(Color.Black), MenuScreen.InstructionScreen.X, MenuScreen.InstructionScreen.Y + 50);
+                e.Graphics.DrawString("S:", Form1.fancyFont, new SolidBrush(Color.Black), MenuScreen.InstructionScreen.X, MenuScreen.InstructionScreen.Y + 75);
+                e.Graphics.DrawString("      To Start", Form1.fancyFont, new SolidBrush(Color.Black), MenuScreen.InstructionScreen.X, MenuScreen.InstructionScreen.Y + 100);
+                e.Graphics.DrawString("A and D:", Form1.fancyFont, new SolidBrush(Color.Black), MenuScreen.InstructionScreen.X, MenuScreen.InstructionScreen.Y + 125);
+                e.Graphics.DrawString("      To Rotate", Form1.fancyFont, new SolidBrush(Color.Black), MenuScreen.InstructionScreen.X, MenuScreen.InstructionScreen.Y + 150);
+                e.Graphics.DrawString("Escape to Close", Form1.fancyFont, new SolidBrush(Color.Black), MenuScreen.InstructionScreen.X, MenuScreen.InstructionScreen.Y + 175);
+            }
         }
 
         private void ScreenOpener_Tick(object sender, EventArgs e)
         {
-            screenFade -= 5;
-            if (screenFade < 0)
+            if (isOpening)
             {
-                LovecraftOperator.Enabled = true;
-                ScreenOpener.Enabled = false;
-                return;
+                screenFade -= 5;
+                if (screenFade < 0)
+                {
+                    LovecraftOperator.Enabled = true;
+                    isOpening = false;
+                    ScreenOpener.Enabled = false;
+                    return;
+                }
+                Refresh();
             }
-            Refresh();
+            else
+            {
+                screenFade += 5;
+                if (screenFade > 255)
+                {
+                    isOpening = true;
+                    ScreenOpener.Enabled = false;
+                    Form1.isOver = true;
+                    Form1.continueSound.Open(new Uri(Application.StartupPath + "\\Resources\\ghost-whispers-6030 (mp3cut.net).wav"));
+                    Form1.continueSound.Play();
+                    Form1.ScreenChanger(new GameOverScreen(), this);
+                    Form1.prot = false;
+                    return;
+                }
+                Refresh();
+            }
         }
+
 
         private void LovecraftOperator_Tick(object sender, EventArgs e)
         {
@@ -235,6 +279,7 @@ namespace SimonSays
             {
                 inc = !inc;
                 Form1.eyeColour[eyeTracker].alpha = 255;
+                playSound(eyeTracker);
             }
             else if (Form1.eyeColour[eyeTracker].alpha < 0 && !inc)
             {
@@ -244,7 +289,7 @@ namespace SimonSays
             }
 
             if (turnTracker > Form1.cthulhuPattern.Count - 1)
-            {
+            {      
                 hisTurn = !hisTurn;
                 LovecraftOperator.Enabled = true;
                 CompTurn.Enabled = false;
@@ -252,6 +297,61 @@ namespace SimonSays
             }
 
             Refresh();
+        }
+
+        public static void playSound(int comp)
+        {
+
+            switch (comp)
+            {
+                case 0:
+                    //Red
+                    redSound.Open(new Uri(Application.StartupPath + "\\Resources\\church-choir-note-c_91bpm_C_major.wav"));
+                    redSound.Play();
+
+                    break;
+                case 1:
+                    //Orange
+                    orangeSound.Open(new Uri(Application.StartupPath + "\\Resources\\church-choir-note-d_96bpm_D_major.wav"));
+                    orangeSound.Play();
+
+                    break;
+                case 2:
+                    //Yellow
+                    yellowSound.Open(new Uri(Application.StartupPath + "\\Resources\\church-choir-note-e_66bpm_E_major.wav"));
+                    yellowSound.Play();
+
+                    break;
+                case 3:
+                    //Green
+                    greenSound.Open(new Uri(Application.StartupPath + "\\Resources\\church-choir-note-f_90bpm_F_major.wav"));
+                    greenSound.Play();
+
+                    break;
+                case 4:
+                    //Blue
+                    blueSound.Open(new Uri(Application.StartupPath + "Resources\\church-choir-note-g_130bpm_G_major.wav"));
+                    blueSound.Play();
+
+                    break;
+                case 5:
+                    //Pink
+                    pinkSound.Open(new Uri(Application.StartupPath + "\\Resources\\church-choir-note-g-2_69bpm_G#.wav"));
+                    pinkSound.Play();
+
+                    break;
+                case 6:
+                    //Purple
+                    purpleSound.Open(new Uri(Application.StartupPath + "\\Resources\\church-choir-note-a_89bpm_A_major.wav"));
+                    purpleSound.Play();
+
+                    break;
+                case 7:
+                    //Octarine
+                    octarineSound.Open(new Uri(Application.StartupPath + "\\Resources\\church-choir-note-b_112bpm_B_major.wav"));
+                    octarineSound.Play();
+                    break;
+            }
         }
 
         private void YourTurn_Tick(object sender, EventArgs e)

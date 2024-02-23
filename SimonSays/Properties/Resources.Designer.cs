@@ -70,6 +70,15 @@ namespace SimonSays.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream BlueNoise {
+            get {
+                return ResourceManager.GetStream("BlueNoise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap CthulhuBackdrop {
@@ -92,9 +101,36 @@ namespace SimonSays.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream ghost_whispers_6030__mp3cut_net_ {
+            get {
+                return ResourceManager.GetStream("ghost_whispers_6030__mp3cut_net_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream green {
             get {
                 return ResourceManager.GetStream("green", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream GreenNoise {
+            get {
+                return ResourceManager.GetStream("GreenNoise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream handle_paper_foley_2_172689__mp3cut_net_ {
+            get {
+                return ResourceManager.GetStream("handle_paper_foley_2_172689__mp3cut_net_", resourceCulture);
             }
         }
         
@@ -420,9 +456,54 @@ namespace SimonSays.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream OctarineNoise {
+            get {
+                return ResourceManager.GetStream("OctarineNoise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream OrangeNoise {
+            get {
+                return ResourceManager.GetStream("OrangeNoise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream PinkNoise {
+            get {
+                return ResourceManager.GetStream("PinkNoise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream PurpleNoise {
+            get {
+                return ResourceManager.GetStream("PurpleNoise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream red {
             get {
                 return ResourceManager.GetStream("red", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream RedNoise {
+            get {
+                return ResourceManager.GetStream("RedNoise", resourceCulture);
             }
         }
         
@@ -439,9 +520,27 @@ namespace SimonSays.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream spellcraft_142264__mp3cut_net_ {
+            get {
+                return ResourceManager.GetStream("spellcraft_142264__mp3cut_net_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream yellow {
             get {
                 return ResourceManager.GetStream("yellow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream YellowNoise {
+            get {
+                return ResourceManager.GetStream("YellowNoise", resourceCulture);
             }
         }
     }

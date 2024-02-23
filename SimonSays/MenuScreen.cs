@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
+using System.IO;
 
 namespace SimonSays
 {
@@ -28,8 +29,11 @@ namespace SimonSays
         Image[] lovecraftNorm = new Image[5];
         Image[] lovecraftLight = new Image[5];
         Image[] lovecraftDark = new Image[5];
+        public static Rectangle InstructionScreen = new Rectangle();
+        public static Boolean showInstructions = true;
 
-        int screenFade = 0;
+        int screenFade = 255;
+        bool isOpening = true;
         public MenuScreen()
         {
             InitializeComponent();
@@ -40,6 +44,8 @@ namespace SimonSays
             DrawLovecraft();
 
             Form1.DrawUserInput(Form1.radius, this);
+
+            InstructionScreen = new Rectangle(this.Height / 2 - 75, -(this.Height - 100), this.Height - 150, this.Height - 100);
 
             Refresh();
         }
@@ -125,6 +131,19 @@ namespace SimonSays
 
             e.Graphics.DrawString("Lovecraft", Form1.font, new SolidBrush(Color.Wheat), new Point(85, 5));
 
+            if (showInstructions)
+            {
+                e.Graphics.FillRectangle(new SolidBrush(Color.Beige), InstructionScreen);
+                e.Graphics.DrawString("INSTRUCTIONS", Form1.fancyFont, new SolidBrush(Color.Black), InstructionScreen.X, InstructionScreen.Y + 2);
+                e.Graphics.DrawString("Space or W:", Form1.fancyFont, new SolidBrush(Color.Black), InstructionScreen.X, InstructionScreen.Y + 25);
+                e.Graphics.DrawString("      To Select", Form1.fancyFont, new SolidBrush(Color.Black), InstructionScreen.X, InstructionScreen.Y + 50);
+                e.Graphics.DrawString("S:", Form1.fancyFont, new SolidBrush(Color.Black), InstructionScreen.X, InstructionScreen.Y + 75);
+                e.Graphics.DrawString("      To Start", Form1.fancyFont, new SolidBrush(Color.Black), InstructionScreen.X, InstructionScreen.Y + 100);
+                e.Graphics.DrawString("A and D:", Form1.fancyFont, new SolidBrush(Color.Black), InstructionScreen.X, InstructionScreen.Y + 125);
+                e.Graphics.DrawString("      To Rotate", Form1.fancyFont, new SolidBrush(Color.Black), InstructionScreen.X, InstructionScreen.Y + 150);
+                e.Graphics.DrawString("Escape to Close", Form1.fancyFont, new SolidBrush(Color.Black), InstructionScreen.X, InstructionScreen.Y + 175);
+            }
+
             if(ScreenFader.Enabled)
             {
                 e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(screenFade, 0, 0, 0)), new Rectangle(0, 0, this.Width, this.Height));
@@ -138,6 +157,15 @@ namespace SimonSays
             DrawLovecraft();
 
             Form1.DrawUserInput(Form1.radius, this);
+
+            if(showInstructions)
+            {
+                InstructionScreen.Y += 25;
+                if (InstructionScreen.Y + InstructionScreen.Height > InstructionScreen.Height + 50)
+                {
+                    InstructionScreen.Y = 50;
+                }
+            }
 
             if (Form1.press)
             {
@@ -158,15 +186,38 @@ namespace SimonSays
 
         private void ScreenFader_Tick(object sender, EventArgs e)
         {
-            screenFade += 5;
-            if (screenFade > 255)
+            if (isOpening)
             {
-                Form1.ScreenChanger(new LoadingScreen(), this);
-                screenFade = 0;
-                ScreenFader.Enabled = false;
-                return;
+                screenFade -= 5;
+                if (screenFade < 0)
+                {
+                    isOpening = false;
+                    MenuOp.Enabled = true;
+                    ScreenFader.Enabled = false;
+                    return;
+                }
+            }
+            else
+            {
+                screenFade += 5;
+                if (screenFade > 255)
+                {
+                    isOpening = true;
+                    Form1.ScreenChanger(new LoadingScreen(), this);
+                    Form1.continueSound.Open(new Uri(Application.StartupPath + "\\Resources\\ghost-whispers-6030 (mp3cut.net).wav"));
+                    Form1.continueSound.Play();
+                    showInstructions = false;
+                    screenFade = 0;
+                    ScreenFader.Enabled = false;
+                    return;
+                }
             }
             Refresh();
+        }
+
+        private void MenuScreen_Load(object sender, EventArgs e)
+        {
+            ScreenFader.Enabled = true;
         }
     }
 }
