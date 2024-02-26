@@ -64,8 +64,6 @@ namespace SimonSays
                 if (sentFromMenu)
                 {
                     Form1.ScreenChanger(new GameScreen(), this);
-                    Form1.continueSound.Open(new Uri(Application.StartupPath + "\\Resources\\ghost-whispers-6030 (mp3cut.net).wav"));
-                    Form1.continueSound.Play();
                     Form1.inGame = true;
                 }
                 else

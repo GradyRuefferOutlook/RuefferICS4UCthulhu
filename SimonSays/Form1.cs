@@ -11,6 +11,12 @@ using System.Media;
 using System.Drawing.Drawing2D;
 using System.Runtime.CompilerServices;
 using System.IO;
+//Grady Rueffer 152446035 Simon Game
+//Welcome Mr.T
+//The instructions should run on startup
+//One small note, press the input key to reverse the game, you'll see this in the name of the game
+//Have fun!
+
 
 namespace SimonSays
 {

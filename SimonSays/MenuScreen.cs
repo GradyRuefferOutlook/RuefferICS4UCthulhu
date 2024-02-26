@@ -61,7 +61,7 @@ namespace SimonSays
         }
 
 
-        
+
 
         private void MenuScreen_Paint(object sender, PaintEventArgs e)
         {
@@ -129,7 +129,14 @@ namespace SimonSays
                 e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 125, Form1.octarineG, Form1.octarineRB)), Form1.widgetOctarine);
             }
 
-            e.Graphics.DrawString("Lovecraft", Form1.font, new SolidBrush(Color.Wheat), new Point(85, 5));
+            if (Form1.reverse)
+            {
+                e.Graphics.DrawString("tfarcevoL", Form1.font, new SolidBrush(Color.Wheat), new Point(85, 5));
+            }
+            else
+            {
+                e.Graphics.DrawString("Lovecraft", Form1.font, new SolidBrush(Color.Wheat), new Point(85, 5));
+            }
 
             if (showInstructions)
             {
@@ -144,7 +151,7 @@ namespace SimonSays
                 e.Graphics.DrawString("Escape to Close", Form1.fancyFont, new SolidBrush(Color.Black), InstructionScreen.X, InstructionScreen.Y + 175);
             }
 
-            if(ScreenFader.Enabled)
+            if (ScreenFader.Enabled)
             {
                 e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(screenFade, 0, 0, 0)), new Rectangle(0, 0, this.Width, this.Height));
             }
@@ -158,7 +165,7 @@ namespace SimonSays
 
             Form1.DrawUserInput(Form1.radius, this);
 
-            if(showInstructions)
+            if (showInstructions)
             {
                 InstructionScreen.Y += 25;
                 if (InstructionScreen.Y + InstructionScreen.Height > InstructionScreen.Height + 50)
@@ -169,7 +176,8 @@ namespace SimonSays
 
             if (Form1.press)
             {
-                Form1.DetermineClosest();
+                Form1.reverse = !Form1.reverse;
+                Form1.press = false;
             }
 
             if (Form1.prot)
@@ -194,6 +202,7 @@ namespace SimonSays
                     isOpening = false;
                     MenuOp.Enabled = true;
                     ScreenFader.Enabled = false;
+                    Form1.prot = false;
                     return;
                 }
             }

@@ -226,8 +226,6 @@ namespace SimonSays
                     isOpening = true;
                     ScreenOpener.Enabled = false;
                     Form1.isOver = true;
-                    Form1.continueSound.Open(new Uri(Application.StartupPath + "\\Resources\\ghost-whispers-6030 (mp3cut.net).wav"));
-                    Form1.continueSound.Play();
                     Form1.ScreenChanger(new GameOverScreen(), this);
                     Form1.prot = false;
                     return;
