@@ -11,6 +11,7 @@ using System.IO;
 
 namespace SimonSays
 {
+    //This was scrapped although reverse remain if you read my form1 note. Evidence of these still remain in a few locations of the code.
     /*
      * Buttons do:
      * Scroll type
@@ -24,11 +25,16 @@ namespace SimonSays
      */
     public partial class MenuScreen : UserControl
     {
+        //Define the lovecraft display
         Rectangle lovecraft = new Rectangle();
         PointF[] povCircle;
+
+        //Holds the lovecraft animation frames (Unused as they looked odd, they were AI generated :D)
         Image[] lovecraftNorm = new Image[5];
         Image[] lovecraftLight = new Image[5];
         Image[] lovecraftDark = new Image[5];
+
+        //Define the instruction screen
         public static Rectangle InstructionScreen = new Rectangle();
         public static Boolean showInstructions = true;
 
@@ -50,6 +56,9 @@ namespace SimonSays
             Refresh();
         }
 
+        /// <summary>
+        /// Draws the lovecraft pov display
+        /// </summary>
         void DrawLovecraft()
         {
             Form1.DrawCircle(lovecraft.Height / 2 + 10);
@@ -65,9 +74,11 @@ namespace SimonSays
 
         private void MenuScreen_Paint(object sender, PaintEventArgs e)
         {
+            //Draw the lovecraft display
             e.Graphics.FillPolygon(new SolidBrush(Color.LightYellow), povCircle);
             e.Graphics.DrawImage(Properties.Resources.LoveCraftBase__1_, lovecraft);
 
+            //Draw the input
             e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 0, 0, 0)), Form1.circlePointsBor);
             e.Graphics.DrawPolygon(new Pen(Color.Gray), Form1.circlePointsBor);
             e.Graphics.DrawPolygon(new Pen(Color.Gray), Form1.circlePointsOuts);
@@ -129,15 +140,18 @@ namespace SimonSays
                 e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 125, Form1.octarineG, Form1.octarineRB)), Form1.widgetOctarine);
             }
 
+            //Print the title
             if (Form1.reverse)
             {
                 e.Graphics.DrawString("tfarcevoL", Form1.font, new SolidBrush(Color.Wheat), new Point(85, 5));
             }
+
             else
             {
                 e.Graphics.DrawString("Lovecraft", Form1.font, new SolidBrush(Color.Wheat), new Point(85, 5));
             }
 
+            //Print instructions
             if (showInstructions)
             {
                 e.Graphics.FillRectangle(new SolidBrush(Color.Beige), InstructionScreen);
@@ -151,6 +165,7 @@ namespace SimonSays
                 e.Graphics.DrawString("Escape to Close", Form1.fancyFont, new SolidBrush(Color.Black), InstructionScreen.X, InstructionScreen.Y + 175);
             }
 
+            //Draw the screenfade if fading in or out
             if (ScreenFader.Enabled)
             {
                 e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(screenFade, 0, 0, 0)), new Rectangle(0, 0, this.Width, this.Height));
@@ -159,12 +174,16 @@ namespace SimonSays
 
         private void MenuOp_Tick(object sender, EventArgs e)
         {
+            //Check for input
             Form1.UserInput();
 
+            //Draw the background elements, initially supposed to be animated but it looked very odd
             DrawLovecraft();
 
+            //Draw the input
             Form1.DrawUserInput(Form1.radius, this);
 
+            //Pull out the instructions
             if (showInstructions)
             {
                 InstructionScreen.Y += 25;
@@ -174,12 +193,14 @@ namespace SimonSays
                 }
             }
 
+            //Alter based on input
             if (Form1.press)
             {
                 Form1.reverse = !Form1.reverse;
                 Form1.press = false;
             }
 
+            //Start the game
             if (Form1.prot)
             {
                 Form1.prot = false;
@@ -194,11 +215,14 @@ namespace SimonSays
 
         private void ScreenFader_Tick(object sender, EventArgs e)
         {
+            //determine whether the screen is opening or closing
             if (isOpening)
             {
+                //Increment the fade until the screen is fully visible
                 screenFade -= 5;
                 if (screenFade < 0)
                 {
+                    //Turn on the screen operations
                     isOpening = false;
                     MenuOp.Enabled = true;
                     ScreenFader.Enabled = false;
@@ -206,11 +230,13 @@ namespace SimonSays
                     return;
                 }
             }
+
             else
             {
                 screenFade += 5;
                 if (screenFade > 255)
                 {
+                    //Turn off the screen operations, Switch screens, play the switching sound
                     isOpening = true;
                     Form1.ScreenChanger(new LoadingScreen(), this);
                     Form1.continueSound.Open(new Uri(Application.StartupPath + "\\Resources\\ghost-whispers-6030 (mp3cut.net).wav"));
@@ -226,6 +252,7 @@ namespace SimonSays
 
         private void MenuScreen_Load(object sender, EventArgs e)
         {
+            //Turn on the screen fade in
             ScreenFader.Enabled = true;
         }
     }

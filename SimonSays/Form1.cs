@@ -15,6 +15,8 @@ using System.IO;
 //Welcome Mr.T
 //The instructions should run on startup
 //One small note, press the input key to reverse the game, you'll see this in the name of the game
+//Oh and one more, the colour octarine is a fictional 8th colour of the rainbow. If you see a weird white or off-purple in cthulhu's eyes, that is octarine (the colour following purple).
+//It is easiest to spot as the colour that is not consistent, adding a bit of challenge.
 //Have fun!
 
 
@@ -22,44 +24,61 @@ namespace SimonSays
 {
     public partial class Form1 : Form
     {
+        //Random Generation for Pattern
         public static Random rndGen = new Random();
 
+        //Store circle points for drawing user control and widgets
         public static List<PointF> circList = new List<PointF>();
-        public static Int32 circDrawTime = 0;
+        
+        //Specify control radius
         public static int radius = 50;
+        //Set the user control circles
         public static PointF[] circlePointsBor, circlePointsInsBor, circlePointsIns, circlePointsOuts;
 
+        //Set the control widgets
         public static PointF[] widgetRed, widgetOrange, widgetYellow, widgetGreen, widgetBlue, widgetPink, widgetPurple, widgetOctarine;
 
+        //For the blinking/weirdly-operating colours, record the required rgb values to be altered (See colour operator below)
         public static int octarineRB = 125, octarineG = 125, redR = 125, orangeRG = 125, yellowRG = 125, greenG = 125, blueB = 125, pinkRG = 125, purpleRB = 125, whiteRGB = 125;
 
+        //Store the control rotation for display purposes
         public static int distance = 0;
-
+        
+        //store whether to spin forward, back, input, or protect
+        //Protect initially, and if there was a bit more time, was meant to be a side event during the game, where you were suppossed to devote your focus to both the game and randomly appearing enemies to protect against, lest you lose
         public static Boolean moveFor, moveBac, prot, press;
 
-        public static List<Int64> protectionPattern = new List<Int64>();
-
+        //Playtype was initially going to reverse the way the game was played, but was scrapped when 
         public static bool playType = false, scrollType = false;
+        //How fast the control moves
         public static int scrollSpeed = 5;
 
-        FontFamily fontFamily = new FontFamily("Perpetua");
+        //Define print-style fonts
         public static Font font = new Font(new FontFamily("Perpetua"), 35, FontStyle.Bold, GraphicsUnit.Pixel);
         public static Font fancyFont = new Font(new FontFamily("Antiquity Print"), 11, FontStyle.Bold, GraphicsUnit.Pixel);
 
+        //Holds player input and computer input lists
         public static List<int> cthulhuPattern = new List<int>();
         public static List<int> pPattern = new List<int>();
+
+        //Store colours for game use in a simple to access array
         public static ARGB[] eyeColour = {new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB(), new ARGB()};
 
+        //Simple booleans to track location so that loading screen can be reused
         public static bool inGame = false;
-        public static bool reverse = false;
         public static bool isOver = false;
 
+        //Handles the reverse
+        public static bool reverse = false;
+
+        //Initialize sound players to overlap
         public static System.Windows.Media.MediaPlayer backMusic = new System.Windows.Media.MediaPlayer();
 
         public static System.Windows.Media.MediaPlayer instructSound = new System.Windows.Media.MediaPlayer();
 
         public static System.Windows.Media.MediaPlayer continueSound = new System.Windows.Media.MediaPlayer();
 
+        //This is inefficient now that we learned constructor methods, but this class simply holds a few values for easy reference
         public class ARGB
         {
             public int alpha;
@@ -79,6 +98,8 @@ namespace SimonSays
         public Form1()
         {
             InitializeComponent();
+
+            //Setup eye colours
             eyeColour[0].Setup(0, 255, 0, 0);
             eyeColour[1].Setup(0, 255, 165, 0);
             eyeColour[2].Setup(0, 255, 255, 0);
@@ -87,9 +108,17 @@ namespace SimonSays
             eyeColour[5].Setup(0, 255, 192, 203);
             eyeColour[6].Setup(0, 160, 32, 240);
             eyeColour[7].Setup(0, octarineRB, octarineG, octarineRB);
+
+            //Initialize proper radius
             radius = (this.Width / 2 + 10);
+
+            //Place the initial distance
             distance = -radius;
+
+            //Select form1 to collect key presses (this was an original issue that was fixed by placing the reference to keypreview)
             this.KeyPreview = true;
+
+            //Start the background music and get it repeating
             backMusic.Open(new Uri(Application.StartupPath + "\\Resources\\spellcraft-142264 (mp3cut.net).wav"));
 
             backMusic.MediaEnded += new EventHandler(backMedia_MediaEnded);
@@ -105,9 +134,13 @@ namespace SimonSays
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //Open the menuscreen
             ScreenChanger(new MenuScreen(), this);
         }
 
+        /// <summary>
+        /// This is Identical to the method we created in class for ease of use
+        /// </summary>
         public static void ScreenChanger(UserControl next, object sender)
         {
             Form f;
@@ -130,6 +163,9 @@ namespace SimonSays
             f.Controls.Add(next);
         }
 
+        /// <summary>
+        /// This is for the creation of the fictional colour octarine, officially a greenish-purple only seen by wizards and cats
+        /// </summary>
         private void OctarineGenerator()
         {
             if (rndGen.Next(0, 2) == 0)
@@ -169,6 +205,9 @@ namespace SimonSays
             }
         }
 
+        /// <summary>
+        /// Just meant to alter rgb values
+        /// </summary>
         private void ColourGenerator_Tick(object sender, EventArgs e)
         {
             redR = ColourAdjuster(redR);
@@ -182,55 +221,69 @@ namespace SimonSays
             OctarineGenerator();
         }
 
+        /// <summary>
+        /// Increment rgb values
+        /// </summary>
         int ColourAdjuster(int colour)
         {
             if (rndGen.Next(0, 2) == 0)
             {
                 colour += 5;
             }
+
             else
             {
                 colour -= 5;
             }
+
             if (colour > 255)
             {
                 colour = 255;
             }
+
             else if (colour < 125)
             {
                 colour = 125;
             }
+
             return colour;
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            //Used for "any button" to continue
             if (isOver)
             {
                 isOver = !isOver;
                 return;
             }
+
             switch (e.KeyCode)
             {
                 case Keys.A:
+                    //Checks for the chosen control style, which is always set to false from default
                     if (scrollType)
                     {
                         moveBac = true;
                     }
+
                     else
                     {
                         moveFor = true;
                     }
+
                     break;
                 case Keys.D:
                     if (scrollType)
                     {
                         moveFor = true;
                     }
+
                     else
                     {
                         moveBac = true;
                     }
+
                     break;
                 case Keys.S:
                     prot = false;
@@ -239,7 +292,9 @@ namespace SimonSays
                     press = false;
                     break;
                 case Keys.Escape:
+                    //Pulls out or hides the instructions and plays a crumple sound
                     MenuScreen.showInstructions = !MenuScreen.showInstructions;
+
                     instructSound.Open(new Uri(Application.StartupPath + "\\Resources\\handle-paper-foley-2-172689 (mp3cut.net).wav"));
                     instructSound.Play();
                     break;
@@ -286,6 +341,9 @@ namespace SimonSays
             }
         }
 
+        /// <summary>
+        /// Just reads the input from the user and rotates the control by changing the distance value
+        /// </summary>
         public static void UserInput()
         {
             if (!playType)
@@ -302,6 +360,7 @@ namespace SimonSays
             }
         }
 
+        //Swaps 2 values, used for quick sort method
         static void swap(int[] arr, int i, int j)
         {
             int temp = arr[i];
@@ -360,55 +419,70 @@ namespace SimonSays
 
         public static void DrawUserInput(int radius, Control controller)
         {
+            //Loops the control if the user should overlap with a previous version of the control
             if (distance < -863)
             {
                 distance = -radius;
             }
+
             else if (distance > 543)
             {
                 distance = -radius;
             }
 
             #region draw input borders
+            //Uses the DrawCircle function (see that for more detail) and copies them over to draw the input borders
             DrawCircle(radius + 25);
+
             for (int i = 0; i < Form1.circList.Count; i++)
             {
                 Form1.circList[i] = new PointF(Form1.circList[i].X + radius - 10, Form1.circList[i].Y + radius + (controller.Height / 2) + 50);
             }
+
             Form1.circlePointsBor = new PointF[Form1.circList.Count];
+
             for (int i = 0; i < Form1.circList.Count; i++)
             {
                 Form1.circlePointsBor[i] = new PointF(Form1.circList[i].X, Form1.circList[i].Y);
             }
 
             DrawCircle(radius + 15);
+
             for (int i = 0; i < Form1.circList.Count; i++)
             {
                 Form1.circList[i] = new PointF(Form1.circList[i].X + radius - 10, Form1.circList[i].Y + radius + (controller.Height / 2) + 50);
             }
+
             Form1.circlePointsOuts = new PointF[Form1.circList.Count];
+
             for (int i = 0; i < Form1.circList.Count; i++)
             {
                 Form1.circlePointsOuts[i] = new PointF(Form1.circList[i].X, Form1.circList[i].Y);
             }
 
             DrawCircle(radius - 40);
+
             for (int i = 0; i < Form1.circList.Count; i++)
             {
                 Form1.circList[i] = new PointF(Form1.circList[i].X + radius - 10, Form1.circList[i].Y + radius + (controller.Height / 2) + 50);
             }
+
             Form1.circlePointsInsBor = new PointF[Form1.circList.Count];
+
             for (int i = 0; i < Form1.circList.Count; i++)
             {
                 Form1.circlePointsInsBor[i] = new PointF(Form1.circList[i].X, Form1.circList[i].Y);
             }
 
             DrawCircle(radius - 50);
+
             for (int i = 0; i < Form1.circList.Count; i++)
             {
                 Form1.circList[i] = new PointF(Form1.circList[i].X + radius - 10, Form1.circList[i].Y + radius + (controller.Height / 2) + 50);
             }
+
             Form1.circlePointsIns = new PointF[Form1.circList.Count];
+
             for (int i = 0; i < Form1.circList.Count; i++)
             {
                 Form1.circlePointsIns[i] = new PointF(Form1.circList[i].X, Form1.circList[i].Y);
@@ -416,10 +490,18 @@ namespace SimonSays
             #endregion
 
             #region define borders
+            //Defines widget borders
             double circIn = 2 * (radius - 40) * Math.PI;
             double circOut = 2 * (radius - 40) * Math.PI;
-            //double distance = 0  - (radius / 4.25);
             #endregion
+
+            /* In order to avoid explaining each widget seperately (because there is a lot and they are all very similar)
+             * Each Function draws a widget by draw a section of circle on both the top and bottom specified borders
+             * It then copies this into an array going from top to bottom, ending by adding its intial value to loop back onto itself and create the filled polygon
+             * What seperates them apart is a tiny bit of inconsistency in the spacing (you can see this in the draw widget function calls)
+             * Most only have two statements as only two variations of widget exist in the loop, however others appear thrice
+             * For specifics, check the draw widget function
+             */
 
             #region red widget
             if (Form1.distance < -radius - 150)
@@ -1054,9 +1136,13 @@ namespace SimonSays
 
         public static void DrawWidget(double distance, int radius, int radiusOut, int radiusIn, double circIn, double circOut, bool top, Control controller)
         {
+            //Clear the temporary list
             Form1.circList.Clear();
+
+            //Check for the top or bottom as, in order to properly loop the polygon, the points must follow a distinct shape where the top follows to the right and the bottom follows to the left
             if (top)
             {
+                //Take the given x values from the distance and put them through a circle function to solve for the y value
                 for (double x = distance; x <= (circIn / 10) + distance; x += 0.1)
                 {
                     if (x < radiusOut && x > -radiusOut)
@@ -1064,13 +1150,17 @@ namespace SimonSays
                         Form1.circList.Add(new PointF(Convert.ToSingle(x), -Convert.ToSingle(Math.Sqrt(Math.Pow(radiusOut, 2) - Math.Pow(-x, 2)))));
                     }
                 }
+
+                //Translate the values onto the screen based on the radius, as the circle draws half off screen
                 for (int i = 0; i < Form1.circList.Count; i++)
                 {
                     Form1.circList[i] = new PointF(Form1.circList[i].X + radius - 10, Form1.circList[i].Y + radius + (controller.Height / 2) + 50);
                 }
             }
+
             else
             {
+                //Take the given x values from the distance and put them through a circle function to solve for the y value
                 for (double x = distance + (circIn / 10); x >= distance; x -= 0.1)
                 {
                     if (x < radiusIn && x > -radiusIn)
@@ -1078,6 +1168,8 @@ namespace SimonSays
                         Form1.circList.Add(new PointF(Convert.ToSingle(x), -Convert.ToSingle(Math.Sqrt(Math.Pow(radiusIn, 2) - Math.Pow(x, 2)))));
                     }
                 }
+
+                //Translate the values onto the screen based on the radius, as the circle draws half off screen
                 for (int i = 0; i < Form1.circList.Count; i++)
                 {
                     Form1.circList[i] = new PointF(Form1.circList[i].X + radius - 10, Form1.circList[i].Y + radius + (controller.Height / 2) + 50);
@@ -1087,29 +1179,38 @@ namespace SimonSays
 
         public static void DrawCircle(int radius)
         {
+            //Clear the temporary list
             Form1.circList.Clear();
+
             for (double x = -radius; x <= radius; x += 0.1)
             {
+                //Works through the x values and adds the positive y values to the list. Adds the values on the radius as they draw oddly otherwise
                 if (x == radius)
                 {
                     Form1.circList.Add(new PointF(Convert.ToSingle(x), 0));
                 }
+
                 else
                 {
                     Form1.circList.Add(new PointF(Convert.ToSingle(x), Convert.ToSingle(Math.Sqrt(Math.Pow(radius, 2) - Math.Pow(x, 2)))));
                 }
             }
+
             for (double x = radius; x >= -radius; x -= 0.1)
             {
+                //Works backwards through the x values and adds the negative y values to the list. Adds the values on the radius as they draw oddly otherwise
                 if (x == -radius)
                 {
                     Form1.circList.Add(new PointF(Convert.ToSingle(x), 0));
                 }
+
                 else
                 {
                     Form1.circList.Add(new PointF(Convert.ToSingle(x), -1 * Convert.ToSingle(Math.Sqrt(Math.Pow(radius, 2) - Math.Pow(x, 2)))));
                 }
             }
+
+            //In order to properly wrap the circle, adds the beginning value as the ending value
             Form1.circList.Add(Form1.circList[0]);
         }
 
@@ -1117,6 +1218,7 @@ namespace SimonSays
         {
             int[] values = new int[8];
 
+            //Try to grab the highest value of the widget. Try statements are used as the widgets do not always exist if they would be off-screen
             try
             {
                 values[0] = Convert.ToInt16(Form1.widgetRed[Form1.widgetRed.Length / 4].Y);
@@ -1189,16 +1291,21 @@ namespace SimonSays
                 values[7] = 999;
             }
 
+            //hold a copy of the unsorted array
             int[] unsort = new int[8];
+
             for (int i = 0; i < unsort.Length; i++)
             {
                 unsort[i] = values[i];
             }
 
-            Form1.quickSort(values, 0, values.Length - 1);
+            //Sort the initial array
+            quickSort(values, 0, values.Length - 1);
 
+            //hold a comparable value
             int comp = 0;
 
+            //Determine the widget that is closest (the lowest y-value) by comparing the unsorted array that can be read by widget to the sorted array that holds the closest widget
             for (int i = 0; i < values.Length; i++)
             {
                 if (unsort[i] == values[0])
@@ -1208,6 +1315,7 @@ namespace SimonSays
                 }
             }
 
+            //Pass the selected widget to the player pattern
             if (inGame)
             {
                 switch (comp)
@@ -1251,6 +1359,8 @@ namespace SimonSays
                 }
                 GameScreen.playSound(comp);
             }
+
+            //This was meant for the menu screen but went unused
             else
             {
                 switch (comp)
@@ -1285,30 +1395,45 @@ namespace SimonSays
             Form1.press = false;
         }
 
+        /// <summary>
+        /// A simple method for comparing both patterns consistently. Returns true if the pattern is correct.
+        /// </summary>
         public static bool ComparePattern()
         {
+            //Operates the reverse game mide
             if (!reverse)
             {
+                //Check the current player pattern
                 for (int i = 0; i < pPattern.Count; i++)
                 {
+                    //Check if one is incorrect and return false immediately if the pattern does not match
                     if (pPattern[i] != cthulhuPattern[i])
                     {
                         return false;
                     }
                 }
+                
+                //Sets the eyes to show correct
                 GameScreen.correctInc = true;
+
                 return true;
             }
+
             else
             {
+                //Check the current player pattern
                 for (int i = 0; i < pPattern.Count; i++)
                 {
+                    //Check if one is incorrect and return false immediately if the pattern does not match
                     if (pPattern[i] != cthulhuPattern[cthulhuPattern.Count - 1 - i])
                     {
                         return false;
                     } 
                 }
+
+                //Sets the eyes to show correct
                 GameScreen.correctInc = true;
+
                 return true;
             }
         }

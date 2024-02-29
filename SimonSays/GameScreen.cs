@@ -16,24 +16,33 @@ namespace SimonSays
 {
     public partial class GameScreen : UserControl
     {
+        //set the fade in variable
         int screenFade = 255;
+
+        //Define cthulhu
         Rectangle CthulhuHead;
         PointF[] cthulhuLeftEye;
         PointF[] cthulhuRightEye;
 
+        //Operate the turns
         bool hisTurn = true;
         int eyeTracker = 0;
 
+        //Operate user turn
         int turnTracker = 0;
         bool inc = true;
 
+        //Operates eye flashing on correct input
         public static bool correctInc = false;
         int correctAlpha = 0;
 
+        //operates screen fade
         bool isOpening = true;
 
+        //Operates how fast the eyes flash
         public static int flashRate = 15;
 
+        //Initialize local sounds
         public static System.Windows.Media.MediaPlayer redSound = new System.Windows.Media.MediaPlayer();
         public static System.Windows.Media.MediaPlayer orangeSound = new System.Windows.Media.MediaPlayer();
         public static System.Windows.Media.MediaPlayer yellowSound = new System.Windows.Media.MediaPlayer();
@@ -46,59 +55,39 @@ namespace SimonSays
         public GameScreen()
         {
             InitializeComponent();
+            
+            //Define cthulhu size
             CthulhuHead = new Rectangle(50, -10, this.Width - 100, this.Height - 100);
         }
 
         private void GameScreen_Load(object sender, EventArgs e)
         {
             ScreenOpener.Enabled = true;
+            
+            //Clear the pattern and generate the first pattern
             Form1.cthulhuPattern.Clear();
             Form1.cthulhuPattern.Add(Form1.rndGen.Next(0, 8));
-            //TODO: clear the pattern list from form1
-            //TODO: refresh
-            //TODO: pause for a bit
-            //TODO: run ComputerTurn()
-        }
-
-        private void ComputerTurn()
-        {
-            //TODO: get rand num between 0 and 4 (0, 1, 2, 3) and add to pattern list. Each number represents a button. For example, 0 may be green, 1 may be blue, etc.
-
-            //TODO: create a for loop that shows each value in the pattern by lighting up approriate button
-
-            //TODO: set guess value back to 0
-        }
-
-        //TODO: create one of these event methods for each button
-        private void greenButton_Click(object sender, EventArgs e)
-        {
-            //TODO: is the value in the pattern list at index [guess] equal to a green?
-            // change button color
-            // play sound
-            // refresh
-            // pause
-            // set button colour back to original
-            // add one to the guess variable
-
-            //TODO:check to see if we are at the end of the pattern, (guess is the same as pattern list count).
-            // call ComputerTurn() method
-            // else call GameOver method
         }
 
         public void GameOver()
         {
+            //Fade the screen out
             ScreenOpener.Enabled = true;
             return;
         }
 
         void DrawEyes()
         {
+            //Draw a circle and fill in an array with the circle points to substitute the eye
+            //To give the effect of the eyes actually glowing, the circles are placed behind the head
             Form1.DrawCircle(15);
+
             cthulhuLeftEye = new PointF[Form1.circList.Count];
             for (int i = 0; i < Form1.circList.Count; i++)
             {
                 cthulhuLeftEye[i] = new PointF(Form1.circList[i].X + 120, Form1.circList[i].Y + 75);
             }
+
             cthulhuRightEye = new PointF[Form1.circList.Count];
             for (int i = 0; i < Form1.circList.Count; i++)
             {
@@ -108,22 +97,28 @@ namespace SimonSays
 
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
+            //Draw eyes and fill in black to hide the background from shining through
             DrawEyes();
             e.Graphics.FillPolygon(new SolidBrush(Color.Black), cthulhuLeftEye);
             e.Graphics.FillPolygon(new SolidBrush(Color.Black), cthulhuRightEye);
+
+            //Colour the eyes appropriately based on eye flashing and turn order
             if (hisTurn)
             {
                 e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(Form1.eyeColour[eyeTracker].alpha, Form1.eyeColour[eyeTracker].red, Form1.eyeColour[eyeTracker].green, Form1.eyeColour[eyeTracker].blue)), cthulhuLeftEye);
                 e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(Form1.eyeColour[eyeTracker].alpha, Form1.eyeColour[eyeTracker].red, Form1.eyeColour[eyeTracker].green, Form1.eyeColour[eyeTracker].blue)), cthulhuRightEye);
             }
+
             else if (!hisTurn)
             {
                 e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, correctAlpha, correctAlpha, correctAlpha)), cthulhuLeftEye);
                 e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, correctAlpha, correctAlpha, correctAlpha)), cthulhuRightEye);
             }
 
+            //Draw the cthulhu head
             e.Graphics.DrawImage(Properties.Resources.CthulhuHead, CthulhuHead);
 
+            //Draw the user control
             e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 0, 0, 0)), Form1.circlePointsBor);
             e.Graphics.DrawPolygon(new Pen(Color.Gray), Form1.circlePointsBor);
             e.Graphics.DrawPolygon(new Pen(Color.Gray), Form1.circlePointsOuts);
@@ -185,11 +180,13 @@ namespace SimonSays
                 e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 125, Form1.octarineG, Form1.octarineRB)), Form1.widgetOctarine);
             }
 
+            //Fade the screen if neccessary
             if (ScreenOpener.Enabled)
             {
                 e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(screenFade, 0, 0, 0)), new Rectangle(0, 0, this.Width, this.Height));
             }
 
+            //Show instructions if toggled
             if (MenuScreen.showInstructions)
             {
                 e.Graphics.FillRectangle(new SolidBrush(Color.Beige), MenuScreen.InstructionScreen);
@@ -206,11 +203,13 @@ namespace SimonSays
 
         private void ScreenOpener_Tick(object sender, EventArgs e)
         {
+            //Same as other screens, increments or lowers an integer to fade in or out 
             if (isOpening)
             {
                 screenFade -= 5;
                 if (screenFade < 0)
                 {
+                    //Starts the game
                     LovecraftOperator.Enabled = true;
                     isOpening = false;
                     ScreenOpener.Enabled = false;
@@ -218,11 +217,13 @@ namespace SimonSays
                 }
                 Refresh();
             }
+
             else
             {
                 screenFade += 5;
                 if (screenFade > 255)
                 {
+                    //Changes to the game over screen
                     isOpening = true;
                     ScreenOpener.Enabled = false;
                     Form1.isOver = true;
@@ -237,9 +238,11 @@ namespace SimonSays
 
         private void LovecraftOperator_Tick(object sender, EventArgs e)
         {
+            //Check and draw the input
             Form1.UserInput();
             Form1.DrawUserInput(Form1.radius, this);
 
+            //Determines the turn and starts the turn
             if (hisTurn)
             {
                 turnTracker = 0;
@@ -247,6 +250,7 @@ namespace SimonSays
                 CompTurn.Enabled = true;
                 return;
             }
+
             else
             {
                 correctInc = false;
@@ -260,9 +264,11 @@ namespace SimonSays
 
         private void CompTurn_Tick(object sender, EventArgs e)
         {
+            //Check and draw the input
             Form1.UserInput();
             Form1.DrawUserInput(Form1.radius, this);
 
+            //Operates the flashing of the eyes to show the pattern
             eyeTracker = Form1.cthulhuPattern[turnTracker];
             if (inc)
             {
@@ -273,12 +279,14 @@ namespace SimonSays
                 Form1.eyeColour[eyeTracker].alpha -= flashRate;
             }
 
+            //Play the note when the colour is at its peak
             if (Form1.eyeColour[eyeTracker].alpha > 255 && inc)
             {
                 inc = !inc;
                 Form1.eyeColour[eyeTracker].alpha = 255;
                 playSound(eyeTracker);
             }
+            //Works through the pattern if the blinking is done
             else if (Form1.eyeColour[eyeTracker].alpha < 0 && !inc)
             {
                 turnTracker++;
@@ -286,6 +294,7 @@ namespace SimonSays
                 inc = !inc;
             }
 
+            //When the pattern is finished, passes the turn
             if (turnTracker > Form1.cthulhuPattern.Count - 1)
             {      
                 hisTurn = !hisTurn;
@@ -299,7 +308,7 @@ namespace SimonSays
 
         public static void playSound(int comp)
         {
-
+            //Simply for playing local sounds based on input
             switch (comp)
             {
                 case 0:
@@ -354,13 +363,16 @@ namespace SimonSays
 
         private void YourTurn_Tick(object sender, EventArgs e)
         {
+            //Check and draw the input
             Form1.UserInput();
             Form1.DrawUserInput(Form1.radius, this);
 
+            //Operates the eyes on correct input
             if (correctInc)
             {
                 correctAlpha += flashRate;
             }
+
             else
             {
                 correctAlpha -= flashRate;
@@ -371,31 +383,40 @@ namespace SimonSays
                 correctAlpha = 255;
                 correctInc = false;
             }
+
             else if (correctAlpha < 0)
             {
                 correctAlpha = 0;
             }
 
+            //No current use in-game
             if (Form1.prot)
             {
 
             }
 
+            //Input the pattern
             if (Form1.press)
             {
+                //Determine the selected widget
                 Form1.DetermineClosest();
+
+                //Runs comparison to end the game early if you get it incorrect
                 if (!Form1.ComparePattern())
                 {
+                    //Ends the turn and passes to game over
                     YourTurn.Enabled = false;
                     GameOver();
                     return;
                 }
             }
 
+            //Determines if the pattern has been met and passes the turn when true
             if (Form1.pPattern.Count >= Form1.cthulhuPattern.Count)
             {
                 if (Form1.ComparePattern())
                 {
+                    //Adds a new piece to the pattern and passes the turn
                     Form1.cthulhuPattern.Add(Form1.rndGen.Next(0, 8));
                     hisTurn = true;
                     LovecraftOperator.Enabled = true;
@@ -404,6 +425,7 @@ namespace SimonSays
                 }
                 else
                 {
+                    //passes to game over
                     YourTurn.Enabled = false;
                     GameOver();
                     return;

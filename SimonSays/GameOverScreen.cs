@@ -11,6 +11,7 @@ namespace SimonSays
 {
     public partial class GameOverScreen : UserControl
     {
+        //Initialize Sounds Locally
         public static System.Windows.Media.MediaPlayer redSound = new System.Windows.Media.MediaPlayer();
         public static System.Windows.Media.MediaPlayer orangeSound = new System.Windows.Media.MediaPlayer();
         public static System.Windows.Media.MediaPlayer yellowSound = new System.Windows.Media.MediaPlayer();
@@ -26,9 +27,13 @@ namespace SimonSays
 
         private void GameOverScreen_Load(object sender, EventArgs e)
         {
+            //Enter the length of the pattern
             lengthLabel.Text = $"{Form1.cthulhuPattern.Count - 1}";
+
+            //Start the operator
             EndOp.Enabled = true;
 
+            //Play all notes for loss sound
             redSound.Open(new Uri(Application.StartupPath + "\\Resources\\church-choir-note-c_91bpm_C_major.wav"));
             redSound.Play();
 
@@ -56,6 +61,7 @@ namespace SimonSays
 
         private void EndOp_Tick(object sender, EventArgs e)
         {
+            //Check if any button has been pressed and send back to the menu
             if (!Form1.isOver)
             {
                 Form1.ScreenChanger(new LoadingScreen(), this);
